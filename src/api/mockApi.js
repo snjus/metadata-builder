@@ -27,9 +27,14 @@ Do not include any additional information, and do not mention strings that do no
         const mockResponse = files.map((file, index) => ({
           id: index + 1,
           name: file.name,
-          documentType: 'PDF',
-          discipline: 'Engineering',
-          imageUrl: ['./../img/bracelet.png','./../img/ticket.png'][Math.floor(Math.random() * 2)]
+          size: Math.floor(Math.random() * 1000000) + 1000, // Random file size between 1KB and 1MB
+          type: file.type || 'application/octet-stream',
+          lastModified: new Date().toISOString(),
+          uploadedAt: new Date().toISOString(),
+          status: 'Uploaded',
+          documentType: ['PDF', 'Word', 'Excel', 'Image'][Math.floor(Math.random() * 4)],
+          discipline: ['Engineering', 'Finance', 'Marketing', 'Human Resources'][Math.floor(Math.random() * 4)],
+          imageUrl:  ['./../img/bracelet.png','./../img/ticket.png'][Math.floor(Math.random() * 2)]
         }));
         resolve(mockResponse);
       }, 1000);
