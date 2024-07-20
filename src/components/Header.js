@@ -4,7 +4,7 @@ import styles from './styles/Header.module.css';
 
 const Header = () => {
   return (
-    <Navbar bg="dark" expand="lg">
+    <Navbar   expand="lg" style={{backgroundColor: '#0b0f19'}}>
     <Container fluid>
       <Navbar.Brand className="d-flex align-items-center">
         <div className={styles.header}>

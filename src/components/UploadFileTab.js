@@ -7,6 +7,7 @@ import FileUploader from './FileUploader';
 import DetailsModal from './DetailsModal';
 import { uploadFiles, downloadResults } from '../api/mockApi';
 import "ag-grid-community/styles/ag-theme-quartz.css";
+import styles from './styles/uploadFileTab.module.css';
 const UploadFileTab = ({ prompt }) => {
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const [columnDefs, setColumnDefs] = useState([]);
@@ -15,6 +16,7 @@ const UploadFileTab = ({ prompt }) => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [costInfo, setCostInfo] = useState('');
   const [totalTokens, setTotalTokens] = useState('');
+  const [acceptedFiles,setAcceptedFiles] = useState([]);
 
   useEffect(() => {
     if (uploadedFiles.length > 0) {
@@ -24,7 +26,7 @@ const UploadFileTab = ({ prompt }) => {
         field: key,
         sortable: true,
         filter: true
-      }));
+    }));
 
       // Add the "Details" button column
       dynamicColumns.push({
@@ -60,13 +62,30 @@ const UploadFileTab = ({ prompt }) => {
       setError('Error downloading results. Please try again.');
     }
   };
+  const onProcess = async ()=>{
+    await handleFileUpload(acceptedFiles);
+  }
 
+  const handleReset = ()=>{
+    setUploadedFiles([])
+    setColumnDefs ([])
+    setCostInfo('')
+    setTotalTokens('')
+    setAcceptedFiles([])
+  }
   return (
     <Container>
       {error && <Alert variant="danger">{error}</Alert>}
       
-        <FileUploader onUpload={handleFileUpload} />
-      
+      <FileUploader onUpload={(acceptedFiles) => handleFileUpload(acceptedFiles)} acceptedFiles={acceptedFiles} setAcceptedFiles={setAcceptedFiles} />
+       <div className={["d-flex justify-content-between mb-3", styles.buttonSection].join(" ")}>
+      <Button onClick={handleReset} className="btn btn-primary me-2" style={{ backgroundColor: '#182230', width: '50%', borderColor: "rgba(255, 255, 255, 0.16)" }}>
+        Reset
+      </Button>
+      <Button className="btn btn-primary" onClick= {onProcess} style={{ backgroundColor: '#182230', width: '50%',borderColor: "rgba(255, 255, 255, 0.16)" }}>
+        Process
+      </Button>
+    </div> 
         <>
           <div className="ag-theme-quartz-dark" style={{ height: 400, width: '100%' }}>
             <AgGridReact
@@ -80,17 +99,19 @@ const UploadFileTab = ({ prompt }) => {
             value={costInfo}
             onChange={(e) => setCostInfo(e.target.value)}
             placeholder="Cost Info"
-            rows={4}
+            rows={2}
             className="mt-3 w-100"
           />
           <textarea
             value={totalTokens}
             onChange={(e) => setTotalTokens(e.target.value)}
             placeholder="Total Tokens"
-            rows={4}
+            rows={2}
             className="mt-3 w-100"
           />
-          <Button onClick={handleDownload} className="mt-3">Download Results</Button>
+      <Button onClick= {handleDownload} className="btn btn-primary" style={{ backgroundColor: '#182230', width: '100%',borderColor: "rgba(255, 255, 255, 0.16)" }}>
+        Download Results
+      </Button>
         </>
        
       <DetailsModal

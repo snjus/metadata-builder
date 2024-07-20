@@ -5,7 +5,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #212529 !important;
+  background-color: #0b0f19 !important;
   color : #fff !important;
 }
 
@@ -33,4 +33,7 @@ label{
 
 .ag-row{
   height: 50px !important;
+}
+.bg-dark{
+  background-color: #0b0f19 !important;
 }
